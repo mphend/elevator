@@ -9,19 +9,6 @@
 #include <map>
 #include <set>
 
-/*    Provide code that simulates an elevator. You are free to use any language.
-Upload the completed project to GitHub (public) for discussion during interview.
-Document all assumptions and any features that weren’t implemented.
- The result should be an executable, or script, that can be run with the following inputs and generate the following outputs.
-
-Inputs: [list of floors to visit] (e.g. elevator start=12 floor=2,9,1,32)
-
-Outputs: [total travel time, floors visited in order] (e.g. 560 12,2,9,1,32)
-
-Program Constants: Single floor travel time: 10
-
- */
-
 typedef std::set<unsigned int> FloorSet;
 typedef std::list<unsigned int> FloorList;
 typedef std::map<double, unsigned int> FloorHistory;
@@ -32,7 +19,7 @@ enum Direction {eUp, eDown };
 class Elevator
 {
 public:
-    Elevator(double floorTravelTime, unsigned int initialFloor);
+    Elevator(double floorTravelTimeSeconds, unsigned int initialFloor);
 
     // visit a set of floors
     // This will obey normal elevator convention, that the car has a current
@@ -48,7 +35,7 @@ public:
     // output the travel history; floors visited and final time
     void PrintHistory(std::ostream& os) const;
 
-    // output the travel history; floors visited and time of each floor
+    // output the full travel history; floors visited and time of each floor
     void PrintFullHistory(std::ostream& os) const;
 
 private:

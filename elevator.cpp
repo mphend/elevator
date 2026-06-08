@@ -12,8 +12,8 @@
 
 
 
-Elevator::Elevator(double floorTravelTime, unsigned int initialFloor) :
-    mFloorTravelTimeSeconds(floorTravelTime),
+Elevator::Elevator(double floorTravelTimeSeconds, unsigned int initialFloor) :
+    mFloorTravelTimeSeconds(floorTravelTimeSeconds),
     mFloor(initialFloor)
 {
     mTravelHistory[0] = mFloor;
@@ -35,8 +35,6 @@ Elevator::Visit(const FloorSet& newFloorsIn, Direction initialDirection)
     // floors in the other. This obeys elevator convention.
     FloorSet::iterator upIt = newFloors.lower_bound(mFloor);   // >=
     FloorSet::iterator downIt = upIt;
-    //if (downIt != newFloors.begin())
-    //    --downIt;
 
     // up travel
     if (initialDirection == eUp)
