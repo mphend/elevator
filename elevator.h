@@ -11,7 +11,6 @@
 
 typedef std::set<unsigned int> FloorSet;
 typedef std::list<unsigned int> FloorList;
-// key is time of visit, value is floor number
 typedef std::map<double, unsigned int> FloorHistory;
 
 enum Direction {eUp, eDown };
@@ -46,6 +45,6 @@ private:
     // floors visited keyed on travel time
     FloorHistory mTravelHistory;
 
-    void TravelUp(FloorSet::const_iterator& it, const FloorSet& newFloors);
-    void TravelDown(FloorSet::const_iterator& it, const FloorSet& newFloors);
+    void TravelUp(FloorSet::const_iterator& i, const FloorSet& newFloors);
+    void TravelDown(FloorSet::const_iterator& i, const FloorSet& newFloors);
 };

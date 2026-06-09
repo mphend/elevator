@@ -9,7 +9,8 @@
 #include "exception.h"
 #include "elevator.h"
 
-void Usage()
+void
+Usage()
 {
     printf("Usage: elevator [--human <'u' or 'd'>] <initialFloor> <space separated floor list>\n");
     printf("    --human : visit floors with typical people-elevator policy,\n");
@@ -37,13 +38,9 @@ int main(int argc, char** argv)
         {
             human = true;
             if (std::string(argv[2]) == "u")
-            {
                 direction = eUp;
-            }
             else if (std::string(argv[2]) == "d")
-            {
                 direction = eDown;
-            }
             else
             {
                 Usage();
@@ -58,34 +55,27 @@ int main(int argc, char** argv)
         {
             if (argc < 5)
             {
+
                 Usage();
                 return 1;
             }
 
             initialFloor = atoi(argv[3]);
             for (size_t i = 4; i < argc; i++)
-            {
                 floorSet.insert(atoi(argv[i]));
-            }
         }
         else
         {
             initialFloor = atoi(argv[1]);
             for (size_t i = 2; i < argc; i++)
-            {
-                floorList.push_back(atoi(argv[i]));
-            }
+               floorList.push_back(atoi(argv[i]));
         }
 
         Elevator elevator(floorTravelTimeSeconds, initialFloor);
         if (human)
-        {
             elevator.Visit(floorSet, direction);
-        }
         else
-        {
             elevator.Visit(floorList);
-        }
 
         elevator.PrintHistory(std::cout);
 
@@ -94,7 +84,7 @@ int main(int argc, char** argv)
             printf(("Regression testing\n----------------------\n"));
             Elevator elevator2(floorTravelTimeSeconds, 12);
 
-            elevator2.Visit({2, 3, 4, 14, 15, 1}, eUp);
+            elevator2.Visit({2, 3, 4, 14, 15}, eUp);
             elevator2.Visit({1, 2, 3, 4, 14, 15}, eDown);
             elevator2.PrintFullHistory(std::cout);
         }

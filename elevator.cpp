@@ -20,7 +20,8 @@ Elevator::Elevator(double floorTravelTimeSeconds, unsigned int initialFloor) :
 }
 
 
-void Elevator::Visit(const FloorSet& newFloorsIn, Direction initialDirection)
+void
+Elevator::Visit(const FloorSet& newFloorsIn, Direction initialDirection)
 {
     FloorSet newFloors = newFloorsIn;
 
@@ -28,79 +29,80 @@ void Elevator::Visit(const FloorSet& newFloorsIn, Direction initialDirection)
     newFloors.erase(mFloor);
 
     if (newFloors.empty())
-    {
         return;
-    }
 
     // Visit all floors in one direction ('up' or 'down') before visiting any
     // floors in the other. This obeys elevator convention.
     FloorSet::iterator upIt = newFloors.lower_bound(mFloor);   // >=
     FloorSet::iterator downIt = upIt;
 
-    switch (initialDirection)
+    // up travel
+    if (initialDirection == eUp)
     {
-        case eUp:
-            TravelUp(upIt, newFloors);
-            TravelDown(downIt, newFloors);
-            break;
-
-        case eDown:
-            TravelDown(downIt, newFloors);
-            TravelUp(upIt, newFloors);
-            break;
+        TravelUp(upIt, newFloors);
+        TravelDown(downIt, newFloors);
+    }
+    else
+    {
+        TravelDown(downIt, newFloors);
+        TravelUp(upIt, newFloors);
     }
 }
 
-void Elevator::Visit(const FloorList& newFloors)
+void
+Elevator::Visit(const FloorList& newFloors)
 {
-    for (FloorList::const_iterator it = newFloors.begin(); it != newFloors.end(); ++it)
+    FloorList::const_iterator i = newFloors.begin();
+    for ( ; i != newFloors.end(); ++i)
     {
-        double travelTime = abs(*it - mFloor) * mFloorTravelTimeSeconds;
-        mFloor = *it;
+        double travelTime = abs(*i - mFloor) * mFloorTravelTimeSeconds;
+        mFloor = *i;
         mTravelHistory[travelTime + mTravelHistory.rbegin()->first] = mFloor;
     }
 }
 
-void Elevator::TravelUp(FloorSet::const_iterator& it, const FloorSet& newFloors)
+void
+Elevator::TravelUp(FloorSet::const_iterator& i, const FloorSet& newFloors)
 {
-    while (it != newFloors.end())
+    while (i != newFloors.end())
     {
-        double travelTime = (*it - mFloor) * mFloorTravelTimeSeconds;
-        mFloor = *it;
+        double travelTime = (*i - mFloor) * mFloorTravelTimeSeconds;
+        mFloor = *i;
         mTravelHistory[travelTime + mTravelHistory.rbegin()->first] = mFloor;
-        ++it;
+        i++;
     }
 }
 
-void Elevator::TravelDown(FloorSet::const_iterator& it, const FloorSet& newFloors)
+void
+Elevator::TravelDown(FloorSet::const_iterator& i, const FloorSet& newFloors)
 {
-    while (it != newFloors.begin())
+    while (i != newFloors.begin())
     {
-        --it;
-        double travelTime = (mFloor - *it) * mFloorTravelTimeSeconds;
-        mFloor = *it;
-        mTravelHistory[travelTime + mTravelHistory.rbegin()->first] = *it;
+        i--;
+        double travelTime = (mFloor - *i) * mFloorTravelTimeSeconds;
+        mFloor = *i;
+        mTravelHistory[travelTime + mTravelHistory.rbegin()->first] = *i;
     }
 }
 
-void Elevator::PrintHistory(std::ostream& os) const
+void
+Elevator::PrintHistory(std::ostream& os) const
 {
     os << mTravelHistory.rbegin()->first << " ";
 
-    for (FloorHistory::const_iterator it = mTravelHistory.begin(); it != mTravelHistory.end();)
+    for (FloorHistory::const_iterator i = mTravelHistory.begin(); i != mTravelHistory.end();)
     {
-        os << it->second;
-        ++it;
-        if (it != mTravelHistory.end())
+        os << i->second;
+        i++;
+        if (i != mTravelHistory.end())
             os << ",";
     }
     os << std::endl;
 }
 
-void Elevator::PrintFullHistory(std::ostream& os) const
+void
+Elevator::PrintFullHistory(std::ostream& os) const
 {
-    for (FloorHistory::const_iterator it = mTravelHistory.begin(); it != mTravelHistory.end(); ++it)
-    {
-        os << "floor " << it->second << ": " << it->first << std::endl;
-    }
+    for (FloorHistory::const_iterator i = mTravelHistory.begin(); i != mTravelHistory.end(); ++i)
+        os << "floor " << i->second << ": " << i->first << std::endl;
 }
